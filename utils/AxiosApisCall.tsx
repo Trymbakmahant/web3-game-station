@@ -51,26 +51,19 @@ export function useActivePublicSessions() {
           setError("An error occurred: " + error.message); // Handle general errors
         }
       } finally {
-        setLoading(false); // Set loading state to false once the request completes
+        setLoading(false);
       }
     };
 
-    fetchSessions(); // Call the fetch function
-  }, []); // The empty array ensures this runs once when the component mounts
+    fetchSessions();
+  }, []);
 
   return { sessions, loading, error };
 }
 
-// Define a generic type for the data you'll be fetching
-interface SnakeData {
-  id: string;
-  name: string;
-  // Add other properties as needed
-}
-
 export function useSnakeData(id: string) {
   // State management for data, loading, and error
-  const [data, setData] = useState<SnakeData | null>(null);
+  const [data, setData] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -83,13 +76,19 @@ export function useSnakeData(id: string) {
     async function fetchData() {
       try {
         // Replace with your actual API endpoint
-        const response = await axios.get(`/snake/${id}`);
+        const response = await axios.get(`/api/create`, {
+          params: {
+            id: id,
+          },
+        });
         setData(response.data);
+        console.log(data);
         setLoading(false);
       } catch (err) {
         setError(
           err instanceof Error ? err : new Error("An unknown error occurred")
         );
+        console.log(err);
         setLoading(false);
       }
     }

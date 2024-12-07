@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Find sessions by orgId with pagination
-    const sessions = await GameSession.find({
+    const sessions = await GameSession.findOne({
       _id: orgId,
     });
 

@@ -4,7 +4,7 @@
 
 import HeroSection from "@/components/HeroSection";
 // import { AddGame } from "@/components/Wagmi/SaveScoreCard";
-import SnakeGame from "@/components/SnakeGame/Game";
+
 export default function Home() {
   return (
     <div className="w-screen h-screen">
@@ -12,7 +12,7 @@ export default function Home() {
       {/* <AddGame />
         <appkit-button /> */}
       <HeroSection />
-      <SnakeGame />
+
       {/* <PublicSessionsPage /> */}
     </div>
   );

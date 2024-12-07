@@ -47,7 +47,7 @@ const PublicSessionsPage: React.FC = () => {
   }
   return (
     <div
-      className="min-h-screen bg-[#F3E5AB] font-['Courier_New'] text-[#4A4238] p-8"
+      className="min-h-screen bg-[hsl(48,75%,81%)] font-['Courier_New'] text-[rgb(74,66,56)] p-8"
       style={{
         backgroundImage:
           "linear-gradient(to bottom right, rgba(255,255,255,0.2), rgba(0,0,0,0.05))",
