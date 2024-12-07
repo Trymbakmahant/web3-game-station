@@ -12,7 +12,7 @@ export interface GameSession {
   description: string;
   startTime: Date;
   endTime: Date;
-  maxPlayers: number;
+
   isPrivate: boolean;
   reward?: {
     type: "points" | "prize";

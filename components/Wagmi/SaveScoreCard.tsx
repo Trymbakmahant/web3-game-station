@@ -24,7 +24,7 @@ export function AddGame() {
     }
 
     writeContract({
-      address: "0x72a137B683Afbc897f3eFbda70B11c1E406eA48E", // Replace with your contract address
+      address: "0xcdd75Dc5ab8B436178FC5Af2d7477bFCb4915404", // Replace with your contract address
       abi,
       functionName: "addGame",
       args: [orgName, gameName, BigInt(score)],

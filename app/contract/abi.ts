@@ -3,16 +3,10 @@ export const abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
-        internalType: "string",
-        name: "orgName",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "gameName",
-        type: "string",
+        indexed: true,
+        internalType: "uint256",
+        name: "gameId",
+        type: "uint256",
       },
       {
         indexed: true,
@@ -27,29 +21,65 @@ export const abi = [
         type: "uint256",
       },
     ],
-    name: "GameAdded",
+    name: "GameDataSaved",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "gameId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "orgAddress",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "sessionStart",
+        type: "uint256",
+      },
+    ],
+    name: "GameSessionCreated",
     type: "event",
   },
   {
     inputs: [
       {
-        internalType: "string",
-        name: "_orgName",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_gameName",
-        type: "string",
+        internalType: "address",
+        name: "_orgAddress",
+        type: "address",
       },
       {
         internalType: "uint256",
-        name: "_score",
+        name: "_sessionStart",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_sessionEnd",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_totalReward",
         type: "uint256",
       },
     ],
-    name: "addGame",
-    outputs: [],
+    name: "createGameSession",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "function",
   },
@@ -61,17 +91,12 @@ export const abi = [
         type: "uint256",
       },
     ],
-    name: "games",
+    name: "gameData",
     outputs: [
       {
-        internalType: "string",
-        name: "orgName",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "gameName",
-        type: "string",
+        internalType: "uint256",
+        name: "gameId",
+        type: "uint256",
       },
       {
         internalType: "address",
@@ -91,30 +116,30 @@ export const abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "_index",
+        name: "",
         type: "uint256",
       },
     ],
-    name: "getGame",
+    name: "gameSessions",
     outputs: [
       {
-        internalType: "string",
-        name: "orgName",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "gameName",
-        type: "string",
-      },
-      {
         internalType: "address",
-        name: "player",
+        name: "orgAddress",
         type: "address",
       },
       {
         internalType: "uint256",
-        name: "score",
+        name: "sessionStart",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "sessionEnd",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "totalReward",
         type: "uint256",
       },
     ],
@@ -122,16 +147,103 @@ export const abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "getGameCount",
-    outputs: [
+    inputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "_gameId",
         type: "uint256",
       },
     ],
+    name: "getGameData",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "gameId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "player",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "score",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct GameSessionTracker.GameData",
+        name: "",
+        type: "tuple",
+      },
+    ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_gameId",
+        type: "uint256",
+      },
+    ],
+    name: "getGameSession",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "orgAddress",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "sessionStart",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "sessionEnd",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "totalReward",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct GameSessionTracker.GameSession",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_gameId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "_player",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_score",
+        type: "uint256",
+      },
+    ],
+    name: "saveGameData",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];

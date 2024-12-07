@@ -7,15 +7,13 @@ import HeroSection from "@/components/HeroSection";
 import SnakeGame from "@/components/SnakeGame/Game";
 export default function Home() {
   return (
-    <div className="">
-      <div>
-        {/* <FlappyBirdGame /> */}
-        {/* <AddGame />
+    <div className="w-screen h-screen">
+      {/* <FlappyBirdGame /> */}
+      {/* <AddGame />
         <appkit-button /> */}
-        <HeroSection />
-        <SnakeGame />
-        {/* <PublicSessionsPage /> */}
-      </div>
+      <HeroSection />
+      <SnakeGame />
+      {/* <PublicSessionsPage /> */}
     </div>
   );
 }

@@ -4,6 +4,8 @@ import "./globals.css";
 import WagmiProviders from "@/provider/WagmiProvider";
 import { headers } from "next/headers";
 import Navbar from "@/components/Navbar";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -31,6 +33,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex flex-col antialiased`}
       >
+        <ToastContainer />
         <Navbar />
         <WagmiProviders cookies={cookies}> {children}</WagmiProviders>
       </body>

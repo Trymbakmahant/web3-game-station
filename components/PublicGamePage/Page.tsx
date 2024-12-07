@@ -1,39 +1,16 @@
 "use client";
 import React, { useState } from "react";
-import { Trophy, Calendar, Users, Globe, Key } from "lucide-react";
+import { Trophy, Calendar, Globe, Key } from "lucide-react";
+import { useActivePublicSessions } from "@/utils/AxiosApisCall";
 
-// Mock data - in real app, this would come from backend
-const mockSessions = [
-  {
-    id: "1",
-    title: "Weekend Snake Challenge",
-    org: "Tech Gamers League",
-    startTime: new Date("2024-03-15T18:00:00"),
-    duration: 30,
-    maxPlayers: 50,
-    reward: { type: "points", value: 500 },
-  },
-  {
-    id: "2",
-    title: "Startup Snake Showdown",
-    org: "Innovators Hub",
-    startTime: new Date("2024-03-20T20:00:00"),
-    duration: 45,
-    maxPlayers: 30,
-    reward: { type: "prize", value: 1000 },
-  },
-];
+import { calculateTimeRemaining } from "@/utils/UnixTime";
 
 const PublicSessionsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [invitationCode, setInvitationCode] = useState("");
   const [codeError, setCodeError] = useState("");
 
-  const filteredSessions = mockSessions.filter(
-    (session) =>
-      session.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      session.org.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const { sessions, loading, error } = useActivePublicSessions();
 
   const handleInvitationCodeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +30,10 @@ const PublicSessionsPage: React.FC = () => {
       setCodeError("Invalid invitation code");
     }
   };
-
+  if (loading) {
+  }
+  if (error) {
+  }
   return (
     <div
       className="min-h-screen bg-[#F3E5AB] font-['Courier_New'] text-[#4A4238] p-8"
@@ -132,9 +112,9 @@ const PublicSessionsPage: React.FC = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSessions.map((session) => (
+          {sessions.map((session) => (
             <div
-              key={session.id}
+              key={session._id}
               className="bg-[#FFFBF0] rounded-none border-4 border-[#4A4238] p-6 
               transition-all duration-300 hover:shadow-lg relative overflow-hidden"
             >
@@ -144,23 +124,25 @@ const PublicSessionsPage: React.FC = () => {
                 {session.title}
               </h2>
               <p className="text-[#4A4238] mb-4 opacity-70 italic">
-                {session.org}
+                description : {session.description}
+              </p>
+              <p className="text-[#4A4238] mb-4 opacity-70 italic">
+                org-address : {session._id}
               </p>
 
               <div className="space-y-2 text-sm text-[#4A4238]">
                 <div className="flex items-center">
                   <Calendar className="mr-2 w-4 h-4 opacity-70" />
-                  {session.startTime.toLocaleString()}
+                  starts :{calculateTimeRemaining(session.startTime / 1000)}
                 </div>
                 <div className="flex items-center">
-                  <Users className="mr-2 w-4 h-4 opacity-70" />
-                  Max Players: {session.maxPlayers}
+                  <Calendar className="mr-2 w-4 h-4 opacity-70" />
+                  end :{calculateTimeRemaining(session.endTime / 1000)}
                 </div>
+
                 <div className="flex items-center">
                   <Trophy className="mr-2 w-4 h-4 opacity-70" />
-                  {session.reward.type === "points"
-                    ? `${session.reward.value} Points`
-                    : `$${session.reward.value} Prize`}
+                  reward : {session.reward}
                 </div>
               </div>
 

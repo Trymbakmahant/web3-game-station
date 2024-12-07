@@ -10,16 +10,17 @@ export async function POST(request: NextRequest) {
 
     // Parse request body
     const requestBody = await request.json();
+    console.log(requestBody);
 
-    // Validate and create game session
     try {
+      // Validate and create game session
       const gameSession = new GameSession({
         orgId: requestBody.orgId,
         title: requestBody.title,
         description: requestBody.description || "",
         startTime: new Date(requestBody.startTime),
         endTime: new Date(requestBody.endTime),
-        maxPlayers: requestBody.maxPlayers,
+
         isPrivate: requestBody.isPrivate || false,
         reward: requestBody.reward || 0,
         // Optional: Add createdBy if you have authentication
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
       const errors = Object.values((validationError as any).errors).map(
         (err: any) => err.message
       );
-
+      console.log(validationError);
       return NextResponse.json(
         {
           message: "Validation failed",
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET handler to retrieve game sessions
+// GET handler to retrieve game sessions by orgId
 export async function GET(request: NextRequest) {
   try {
     // Ensure MongoDB connection
@@ -71,20 +72,30 @@ export async function GET(request: NextRequest) {
 
     // Extract query parameters
     const { searchParams } = new URL(request.url);
+    const orgId = searchParams.get("orgId");
     const page = Number(searchParams.get("page")) || 1;
     const limit = Number(searchParams.get("limit")) || 10;
     const skip = (page - 1) * limit;
 
-    // Find active sessions with pagination
+    if (!orgId) {
+      return NextResponse.json(
+        { message: "orgId is required in query parameters" },
+        { status: 400 }
+      );
+    }
+
+    // Find sessions by orgId with pagination
     const sessions = await GameSession.find({
+      orgId,
       status: { $in: ["upcoming", "ongoing"] },
     })
       .sort({ startTime: 1 })
       .skip(skip)
       .limit(limit);
 
-    // Count total sessions
+    // Count total sessions for the given orgId
     const total = await GameSession.countDocuments({
+      orgId,
       status: { $in: ["upcoming", "ongoing"] },
     });
 

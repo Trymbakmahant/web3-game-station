@@ -8,7 +8,7 @@ export interface IGameSession extends Document {
   description?: string;
   startTime: Date;
   endTime: Date;
-  maxPlayers: number;
+
   isPrivate: boolean;
   reward: number;
   participants?: string[]; // Array of user IDs
@@ -38,31 +38,14 @@ const GameSessionSchema: Schema = new Schema(
       maxlength: 500,
     },
     startTime: {
-      type: Date,
-      required: true,
-      validate: {
-        validator: function (v: Date) {
-          return v > new Date(); // Ensure start time is in the future
-        },
-        message: "Start time must be in the future",
-      },
-    },
-    endTime: {
-      type: Date,
-      required: true,
-      validate: {
-        validator: function (this: IGameSession, v: Date) {
-          return v > this.startTime; // Ensure end time is after start time
-        },
-        message: "End time must be after start time",
-      },
-    },
-    maxPlayers: {
       type: Number,
       required: true,
-      min: [1, "Must have at least 1 player"],
-      max: [100, "Cannot exceed 100 players"],
     },
+    endTime: {
+      type: Number,
+      required: true,
+    },
+
     isPrivate: {
       type: Boolean,
       default: false,
@@ -78,15 +61,6 @@ const GameSessionSchema: Schema = new Schema(
         ref: "User", // Assuming you have a User model
       },
     ],
-    status: {
-      type: String,
-      enum: ["upcoming", "ongoing", "completed", "cancelled"],
-      default: "upcoming",
-    },
-    createdBy: {
-      type: String,
-      ref: "User",
-    },
   },
   {
     timestamps: true, // Adds createdAt and updatedAt fields
@@ -101,11 +75,6 @@ GameSessionSchema.virtual("currentParticipantCount").get(function (
 ) {
   return this.participants ? this.participants.length : 0;
 });
-
-// Method to check if session is full
-GameSessionSchema.methods.isFull = function (this: IGameSession) {
-  return this.currentParticipantCount >= this.maxPlayers;
-};
 
 // Static method to find active sessions
 GameSessionSchema.statics.findActiveSessions = function () {

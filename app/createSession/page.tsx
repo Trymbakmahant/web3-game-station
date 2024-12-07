@@ -1,8 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import BackButton from "@/components/ui/backbutton";
 import { PlusCircle, Trophy, Calendar, Lock, Unlock } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { abi } from "@/app/contract/abi";
 import {
   Select,
   SelectContent,
@@ -13,8 +16,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useAppKitAccount } from "@reown/appkit/react";
+
+import { toast } from "react-toastify";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const CreateGameSessionForm: React.FC = () => {
+  const { data: hash, error, writeContract } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
+
+  const [isCreated, setIsCreated] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -22,16 +37,86 @@ const CreateGameSessionForm: React.FC = () => {
     duration: 30,
     isPrivate: false,
     maxPlayers: 10,
-    rewardType: "points",
     rewardValue: 0,
   });
+  const { isConnected, address } = useAppKitAccount();
+  async function HandleCreate() {
+    if (!address && address == "undefined") {
+      toast.warning("Please connect your wallet", {
+        position: "top-left",
+      });
+      return;
+    }
+    const _sessionStart = formData.startTime;
+    const sessionStart = Math.floor(new Date(_sessionStart).getTime() / 1000);
+    const endTimeUnix = sessionStart + formData.duration;
+    const score = formData.rewardValue;
+    if (isNaN(score)) {
+      alert("Please enter a valid score.");
+      return;
+    }
+
+    writeContract({
+      address: "0xcdd75Dc5ab8B436178FC5Af2d7477bFCb4915404", // Replace with your contract address
+      abi,
+      functionName: "createGameSession",
+      args: [address, sessionStart, endTimeUnix, BigInt(score)],
+    });
+
+    const Payload = {
+      orgId: address,
+      title: formData.title,
+      description: formData.description,
+      startTime: sessionStart,
+      endTime: endTimeUnix,
+
+      isPrivate: formData.isPrivate,
+      reward: formData.rewardValue,
+    };
+    const res = await axios.post("/api/create", Payload);
+    console.log(res.status);
+  }
+  const notify = () => {
+    toast.success("Your transaction is confirmed", {
+      position: "top-left",
+    });
+  };
+
+  useEffect(() => {
+    if (isConfirmed) {
+      notify();
+      setIsCreated(true);
+    }
+  }, [isConfirmed]);
+  const router = useRouter();
+  if (!isConnected) {
+    return (
+      <div className="flex justify-center  w-screen h-screen items-center">
+        Please Connect wallet !
+      </div>
+    );
+  }
+
+  if (isCreated) {
+    if (formData.isPrivate) {
+      console.log("private");
+      return (
+        <div className="flex justify-center items-center bg-white text-black z-10">
+          {" "}
+          here i put invitaion code
+        </div>
+      );
+    } else {
+      console.log("public");
+      router.push("/publicroom");
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Implement session creation logic
     console.log("Session Created:", formData);
   };
-
   return (
     <div className="flex justify-center items-center w-screen h-screen bg-[#FFF7E6]">
       <div className="fixed top-4  left-7">
@@ -163,12 +248,16 @@ const CreateGameSessionForm: React.FC = () => {
             </div>
           </div>
 
-          <button
-            type="submit"
+          <Button
+            onClick={() => {
+              HandleCreate();
+            }}
             className="w-full bg-[#8B4513] text-[#FFF7E6] py- rounded-md hover:bg-[#5D4037] transition-colors"
           >
             Create Session
-          </button>
+            {isConfirming && "Processing"}
+          </Button>
+          {error && <div className="text-red-400"> {error.message} </div>}
         </form>
       </div>
     </div>
