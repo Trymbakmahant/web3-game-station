@@ -11,14 +11,21 @@
   "dependencies": {
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-tabs": "^1.1.1",
+    "@reown/appkit": "^1.5.3",
+    "@reown/appkit-adapter-wagmi": "^1.5.3",
+    "@tanstack/react-query": "^5.62.3",
+    "@wagmi/core": "^2.15.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.468.0",
     "next": "14.2.16",
+    "pino-pretty": "^13.0.0",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "viem": "~2.21.54",
+    "wagmi": "^2.13.4"
   },
   "devDependencies": {
     "@types/node": "^20",

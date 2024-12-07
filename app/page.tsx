@@ -2,13 +2,18 @@
 
 //import PublicSessionsPage from "@/components/PublicGamePage/Page";
 
-import SnakeGame from "@/components/SnakeGame/Game";
+import HeroSection from "@/components/HeroSection";
+import { AddGame } from "@/components/Wagmi/SaveScoreCard";
+//import SnakeGame from "@/components/SnakeGame/Game";
 export default function Home() {
   return (
-    <div className="flex  w-screen h-screen justify-center items-center">
+    <div className="">
       <div>
         {/* <FlappyBirdGame /> */}
-        <SnakeGame />
+        <AddGame />
+        <appkit-button />
+        <HeroSection />
+
         {/* <PublicSessionsPage /> */}
       </div>
     </div>
