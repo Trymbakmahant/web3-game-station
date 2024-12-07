@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+
 const CreateGameSessionForm: React.FC = () => {
   const [formData, setFormData] = useState({
     title: "",
@@ -32,18 +33,18 @@ const CreateGameSessionForm: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center w-screen h-screen">
+    <div className="flex justify-center items-center w-screen h-screen bg-[#FFF7E6]">
       <div className="fixed top-7 left-7">
         <BackButton />
       </div>
-      <div className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-bold mb-6 flex items-center">
-          <PlusCircle className="mr-2 text-blue-600" />
+      <div className="max-w-xl mx-auto p-6 bg-[#FFFAF0] shadow-lg rounded-lg border-2 border-[#E6D2B5]">
+        <h2 className="text-2xl font-bold mb-6 flex items-center text-[#8B4513]">
+          <PlusCircle className="mr-2 text-[#CD853F]" />
           Create Game Session
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-[#5D4037]">
               Session Title
             </label>
             <Input
@@ -52,13 +53,13 @@ const CreateGameSessionForm: React.FC = () => {
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
               }
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
+              className="mt-1 block w-full rounded-md border-[#D2B48C] bg-[#FFF5E1] shadow-sm focus:border-[#CD853F] focus:ring focus:ring-[#E6D2B5]"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-[#5D4037]">
               Description
             </label>
             <Textarea
@@ -66,15 +67,15 @@ const CreateGameSessionForm: React.FC = () => {
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
               }
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
+              className="mt-1 block w-full rounded-md border-[#D2B48C] bg-[#FFF5E1] shadow-sm focus:border-[#CD853F] focus:ring focus:ring-[#E6D2B5]"
               rows={3}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                <Calendar className="inline mr-2 w-4 h-4" />
+              <label className="block text-sm font-medium text-[#5D4037]">
+                <Calendar className="inline mr-2 w-4 h-4 text-[#CD853F]" />
                 Start Time
               </label>
               <Input
@@ -83,12 +84,12 @@ const CreateGameSessionForm: React.FC = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, startTime: e.target.value })
                 }
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
+                className="mt-1 block w-full rounded-md border-[#D2B48C] bg-[#FFF5E1] shadow-sm focus:border-[#CD853F] focus:ring focus:ring-[#E6D2B5]"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-[#5D4037]">
                 Duration (Minutes)
               </label>
               <Input
@@ -100,7 +101,7 @@ const CreateGameSessionForm: React.FC = () => {
                     duration: parseInt(e.target.value),
                   })
                 }
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
+                className="mt-1 block w-full rounded-md border-[#D2B48C] bg-[#FFF5E1] shadow-sm focus:border-[#CD853F] focus:ring focus:ring-[#E6D2B5]"
                 min={10}
                 max={120}
                 required
@@ -110,30 +111,11 @@ const CreateGameSessionForm: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Max Players
-              </label>
-              <Input
-                type="number"
-                value={formData.maxPlayers}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    maxPlayers: parseInt(e.target.value),
-                  })
-                }
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-                min={2}
-                max={100}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-[#5D4037]">
                 {formData.isPrivate ? (
-                  <Lock className="inline mr-2 w-4 h-4 text-red-500" />
+                  <Lock className="inline mr-2 w-4 h-4 text-[#8B4513]" />
                 ) : (
-                  <Unlock className="inline mr-2 w-4 h-4 text-green-500" />
+                  <Unlock className="inline mr-2 w-4 h-4 text-[#228B22]" />
                 )}
                 Session Type
               </label>
@@ -146,10 +128,10 @@ const CreateGameSessionForm: React.FC = () => {
                   });
                 }}
               >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Selecte Your Session type" />
+                <SelectTrigger className="w-[180px] bg-[#FFF5E1] border-[#D2B48C]">
+                  <SelectValue placeholder="Select Your Session type" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-[#FFFAF0] border-[#D2B48C]">
                   <SelectGroup>
                     <SelectLabel>Session Types</SelectLabel>
                     <SelectItem value="public">Public</SelectItem>
@@ -158,54 +140,32 @@ const CreateGameSessionForm: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              <Trophy className="inline mr-2 w-4 h-4" />
-              Reward
-            </label>
-            <div className="grid grid-cols-2 gap-4">
-              <Select
-                value={formData.rewardType}
-                onValueChange={(value) =>
-                  setFormData({
-                    ...formData,
-                    rewardType: value as "points" | "prize",
-                  })
-                }
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Selecte Your Session type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Prize Type</SelectLabel>
-                    <SelectItem value="points">Points</SelectItem>
-                    <SelectItem value="prize">Prize</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-
-              <Input
-                type="number"
-                value={formData.rewardValue}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    rewardValue: parseInt(e.target.value),
-                  })
-                }
-                placeholder="Reward Amount"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-                min={0}
-              />
+            <div>
+              <label className="block text-sm font-medium text-[#5D4037]">
+                <Trophy className="inline mr-2 w-4 h-4 text-[#CD853F]" />
+                Reward
+              </label>
+              <div className="">
+                <Input
+                  type="number"
+                  value={formData.rewardValue}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      rewardValue: parseInt(e.target.value),
+                    })
+                  }
+                  placeholder="Reward Amount"
+                  className="mt-1 block w-full rounded-md border-[#D2B48C] bg-[#FFF5E1] shadow-sm focus:border-[#CD853F] focus:ring focus:ring-[#E6D2B5]"
+                  min={0}
+                />
+              </div>
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
+            className="w-full bg-[#8B4513] text-[#FFF7E6] py-2 rounded-md hover:bg-[#5D4037] transition-colors"
           >
             Create Session
           </button>
