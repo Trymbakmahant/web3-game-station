@@ -34,7 +34,7 @@ const CreateGameSessionForm: React.FC = () => {
 
   return (
     <div className="flex justify-center items-center w-screen h-screen bg-[#FFF7E6]">
-      <div className="fixed top-7 left-7">
+      <div className="fixed top-4  left-7">
         <BackButton />
       </div>
       <div className="max-w-xl mx-auto p-6 bg-[#FFFAF0] shadow-lg rounded-lg border-2 border-[#E6D2B5]">
@@ -165,7 +165,7 @@ const CreateGameSessionForm: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full bg-[#8B4513] text-[#FFF7E6] py-2 rounded-md hover:bg-[#5D4037] transition-colors"
+            className="w-full bg-[#8B4513] text-[#FFF7E6] py- rounded-md hover:bg-[#5D4037] transition-colors"
           >
             Create Session
           </button>
