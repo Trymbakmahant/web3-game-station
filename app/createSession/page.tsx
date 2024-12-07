@@ -38,6 +38,7 @@ const CreateGameSessionForm: React.FC = () => {
     isPrivate: false,
     maxPlayers: 10,
     rewardValue: 0,
+    gameId: "snake",
   });
   const { isConnected, address } = useAppKitAccount();
   async function HandleCreate() {
@@ -69,7 +70,7 @@ const CreateGameSessionForm: React.FC = () => {
       description: formData.description,
       startTime: sessionStart,
       endTime: endTimeUnix,
-
+      gameId: formData.gameId,
       isPrivate: formData.isPrivate,
       reward: formData.rewardValue,
     };
@@ -247,7 +248,26 @@ const CreateGameSessionForm: React.FC = () => {
               </div>
             </div>
           </div>
-
+          <Select
+            value={formData.gameId == "snake" ? "snake" : "flappybird"}
+            onValueChange={(value) => {
+              setFormData({
+                ...formData,
+                gameId: value,
+              });
+            }}
+          >
+            <SelectTrigger className="w-full  text-black border-[#D2B48C]">
+              <SelectValue placeholder="Select Your Gaming type" />
+            </SelectTrigger>
+            <SelectContent className="bg-[#FFFAF0] border-[#D2B48C]">
+              <SelectGroup>
+                <SelectLabel>Session Game</SelectLabel>
+                <SelectItem value="snake">Snake 🐍</SelectItem>
+                <SelectItem value="flappybird">Flappy Bird 🐥</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
           <Button
             onClick={() => {
               HandleCreate();

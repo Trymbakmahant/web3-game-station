@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const currentTime = Math.floor(Date.now() / 1000);
-    const isPrivate = searchParams.get("isPrivate") === "false";
+    const isPrivate = searchParams.get("isPrivate") === "true";
 
     const sessions = await GameSession.find({
       endTime: { $gt: currentTime },

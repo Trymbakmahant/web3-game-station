@@ -3,13 +3,19 @@ import React, { useState } from "react";
 import { Trophy, Calendar, Globe, Key } from "lucide-react";
 import { useActivePublicSessions } from "@/utils/AxiosApisCall";
 
-import { calculateTimeRemaining } from "@/utils/UnixTime";
+import {
+  getTimeDifferenceFromUnix,
+  isCurrentTimeOutsideRange,
+} from "@/utils/UnixTime";
+import { Button } from "../ui/button";
+import HamsterWheel from "../Loader/hamsterLoading";
+import { useRouter } from "next/navigation";
 
 const PublicSessionsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [invitationCode, setInvitationCode] = useState("");
   const [codeError, setCodeError] = useState("");
-
+  const router = useRouter();
   const { sessions, loading, error } = useActivePublicSessions();
 
   const handleInvitationCodeSubmit = (e: React.FormEvent) => {
@@ -31,6 +37,11 @@ const PublicSessionsPage: React.FC = () => {
     }
   };
   if (loading) {
+    return (
+      <div className="h-screen w-screen flex justify-center items-center bg-[#F3E5AB]">
+        <HamsterWheel />
+      </div>
+    );
   }
   if (error) {
   }
@@ -119,7 +130,6 @@ const PublicSessionsPage: React.FC = () => {
               transition-all duration-300 hover:shadow-lg relative overflow-hidden"
             >
               <div className="absolute inset-0 border-2 border-[#4A4238] pointer-events-none"></div>
-
               <h2 className="text-xl font-bold mb-2 uppercase tracking-wide">
                 {session.title}
               </h2>
@@ -127,17 +137,16 @@ const PublicSessionsPage: React.FC = () => {
                 description : {session.description}
               </p>
               <p className="text-[#4A4238] mb-4 opacity-70 italic">
-                org-address : {session._id}
+                org-address : {session.orgId}
               </p>
-
               <div className="space-y-2 text-sm text-[#4A4238]">
                 <div className="flex items-center">
                   <Calendar className="mr-2 w-4 h-4 opacity-70" />
-                  starts :{calculateTimeRemaining(session.startTime / 1000)}
+                  starts :{getTimeDifferenceFromUnix(session.startTime)}
                 </div>
                 <div className="flex items-center">
                   <Calendar className="mr-2 w-4 h-4 opacity-70" />
-                  end :{calculateTimeRemaining(session.endTime / 1000)}
+                  end :{getTimeDifferenceFromUnix(session.endTime)}
                 </div>
 
                 <div className="flex items-center">
@@ -145,8 +154,12 @@ const PublicSessionsPage: React.FC = () => {
                   reward : {session.reward}
                 </div>
               </div>
-
-              <button
+              disabled=
+              {!isCurrentTimeOutsideRange(session.startTime, session.endTime)}
+              <Button
+                onClick={() => {
+                  router.push(`/snake/${session._id}`);
+                }}
                 className="mt-4 w-full border-2 border-[#4A4238] py-2 
                 uppercase tracking-wider font-bold 
                 bg-[#4A4238] text-[#FFFBF0] 
@@ -154,7 +167,7 @@ const PublicSessionsPage: React.FC = () => {
                 transition-all"
               >
                 Join Session
-              </button>
+              </Button>
             </div>
           ))}
         </div>

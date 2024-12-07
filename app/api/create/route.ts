@@ -18,9 +18,9 @@ export async function POST(request: NextRequest) {
         orgId: requestBody.orgId,
         title: requestBody.title,
         description: requestBody.description || "",
-        startTime: new Date(requestBody.startTime),
-        endTime: new Date(requestBody.endTime),
-
+        startTime: requestBody.startTime,
+        endTime: requestBody.endTime,
+        gameId: requestBody.gameId,
         isPrivate: requestBody.isPrivate || false,
         reward: requestBody.reward || 0,
         // Optional: Add createdBy if you have authentication
@@ -72,10 +72,7 @@ export async function GET(request: NextRequest) {
 
     // Extract query parameters
     const { searchParams } = new URL(request.url);
-    const orgId = searchParams.get("orgId");
-    const page = Number(searchParams.get("page")) || 1;
-    const limit = Number(searchParams.get("limit")) || 10;
-    const skip = (page - 1) * limit;
+    const orgId = searchParams.get("id");
 
     if (!orgId) {
       return NextResponse.json(
@@ -86,24 +83,11 @@ export async function GET(request: NextRequest) {
 
     // Find sessions by orgId with pagination
     const sessions = await GameSession.find({
-      orgId,
-      status: { $in: ["upcoming", "ongoing"] },
-    })
-      .sort({ startTime: 1 })
-      .skip(skip)
-      .limit(limit);
-
-    // Count total sessions for the given orgId
-    const total = await GameSession.countDocuments({
-      orgId,
-      status: { $in: ["upcoming", "ongoing"] },
+      _id: orgId,
     });
 
     return NextResponse.json({
       sessions,
-      currentPage: page,
-      totalPages: Math.ceil(total / limit),
-      totalSessions: total,
     });
   } catch (error) {
     console.error("Error retrieving game sessions:", error);

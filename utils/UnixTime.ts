@@ -31,3 +31,11 @@ export function getTimeDifferenceFromUnix(givenUnixTime: number): string {
     return "The time is now";
   }
 }
+
+export function isCurrentTimeOutsideRange(
+  startTimeUnix: number,
+  endTimeUnix: number
+): boolean {
+  const currentTimeUnix = Math.floor(Date.now() / 1000);
+  return currentTimeUnix < startTimeUnix || currentTimeUnix > endTimeUnix;
+}

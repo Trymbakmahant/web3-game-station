@@ -14,7 +14,8 @@ interface Point {
   y: number;
 }
 
-const CanvasSnakeGame: React.FC = () => {
+const CanvasSnakeGame = ({ id }: { id: string }) => {
+  console.log(id);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);

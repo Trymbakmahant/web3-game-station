@@ -8,7 +8,7 @@ export interface IGameSession extends Document {
   description?: string;
   startTime: Date;
   endTime: Date;
-
+  gameId: string;
   isPrivate: boolean;
   reward: number;
   participants?: string[]; // Array of user IDs
@@ -25,6 +25,10 @@ const GameSessionSchema: Schema = new Schema(
       type: String,
       required: true,
       trim: true,
+    },
+    gameId: {
+      type: String,
+      required: true,
     },
     title: {
       type: String,
@@ -69,22 +73,6 @@ const GameSessionSchema: Schema = new Schema(
   }
 );
 
-// Virtual to get current participant count
-GameSessionSchema.virtual("currentParticipantCount").get(function (
-  this: IGameSession
-) {
-  return this.participants ? this.participants.length : 0;
-});
-
-// Static method to find active sessions
-GameSessionSchema.statics.findActiveSessions = function () {
-  return this.find({
-    status: { $in: ["upcoming", "ongoing"] },
-    startTime: { $gte: new Date() },
-  });
-};
-
-// Prevent duplicate compilation of model
 export const GameSession =
   (mongoose.models.GameSession as Model<IGameSession>) ||
   mongoose.model<IGameSession>("GameSession", GameSessionSchema);
