@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { abi } from "@/app/contract/abi";
 import { toast } from "react-toastify";
+import axios from "axios";
 interface IGameEnd {
   score: number;
   _gameId: number;
+  gameId: string;
 }
 
-const SnakeGameEndCard = ({ score, _gameId }: IGameEnd) => {
+const SnakeGameEndCard = ({ score, _gameId, gameId }: IGameEnd) => {
   const [selectedOption, setSelectedOption] = useState("");
   const { address } = useAppKitAccount();
   const { data: hash, writeContract } = useWriteContract();
@@ -19,7 +21,7 @@ const SnakeGameEndCard = ({ score, _gameId }: IGameEnd) => {
     hash,
   });
   const router = useRouter();
-  const handleBlockchainSave = () => {
+  const handleBlockchainSave = async () => {
     setSelectedOption("blockchain");
     writeContract({
       address: "0xcdd75Dc5ab8B436178FC5Af2d7477bFCb4915404", // Replace with your contract address
@@ -27,6 +29,13 @@ const SnakeGameEndCard = ({ score, _gameId }: IGameEnd) => {
       functionName: "saveGameData",
       args: [_gameId, address, BigInt(score)],
     });
+    const payload = {
+      base: address,
+      score: score,
+      gameId,
+    };
+    const res = await axios.post("/api/user", payload);
+    console.log(res);
   };
 
   const handleContinue = () => {

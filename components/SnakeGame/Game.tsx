@@ -3,6 +3,7 @@ import { useSnakeData } from "@/utils/AxiosApisCall";
 import React, { useRef, useEffect, useState } from "react";
 
 import GameEndCard from "./GameEndCard";
+import Leaderboard from "./Leaderboard";
 
 const GRID_SIZE = 20;
 const CELL_SIZE = 20;
@@ -225,16 +226,16 @@ const CanvasSnakeGame = ({ id }: { id: string }) => {
   }, [gameOver]);
 
   if (gameOver) {
-    return <GameEndCard score={score} _gameId={1} />;
+    return <GameEndCard score={score} _gameId={1} gameId={id} />;
   }
 
   return (
     <div className="fixed bg-[#D2B48C] flex flex-row top-0 left-0 z-20 w-screen ">
       <div className=" flex-1 items-center justify-center">
-        {/* {data && <Leaderboard Participants={data.sessions.participants} />} */}
+        {data && <Leaderboard id={id} />}
       </div>
       <div className=" flex-1 items-center justify-center">
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <div className="flex flex-col items-center justify-center min-h-screen ">
           <div className="mb-4 text-2xl font-bold">Score: {score}</div>
           <canvas
             ref={canvasRef}
@@ -259,7 +260,7 @@ const CanvasSnakeGame = ({ id }: { id: string }) => {
           </div>
         </div>
       </div>
-      <div className=" flex-1 flex items-center  justify-center">
+      <div className=" flex-1 flex   justify-center">
         {data && <CreamWhiteGameSessionCard session={data.sessions} />}
       </div>
     </div>

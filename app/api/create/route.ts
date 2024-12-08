@@ -84,7 +84,13 @@ export async function GET(request: NextRequest) {
     // Find sessions by orgId with pagination
     const sessions = await GameSession.findOne({
       _id: orgId,
-    });
+    })
+      .populate({
+        path: "participants", // Path to populate
+        model: "User", // Reference to the User model
+        select: "base score", // Fields to include in the result
+      })
+      .exec();
 
     return NextResponse.json({
       sessions,

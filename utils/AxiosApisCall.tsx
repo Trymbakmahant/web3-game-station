@@ -102,3 +102,43 @@ export function useSnakeData(id: string) {
   // Return an object with data, loading state, and error
   return { data, loading, error };
 }
+
+interface User {
+  _id: string;
+  base: string;
+  score: number;
+}
+
+interface UseHighScoresResult {
+  users: User[] | null;
+  loading: boolean;
+  error: string | null;
+}
+
+export const useHighScores = (id: string): UseHighScoresResult => {
+  const [users, setUsers] = useState<User[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchHighScores = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await axios.get(`/api/user?id=${id}`);
+        setUsers(response.data.users);
+      } catch (err: any) {
+        setError(err.response?.data?.message || "Failed to fetch high scores");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHighScores();
+  }, [id]);
+
+  return { users, loading, error };
+};
